@@ -26,7 +26,8 @@ function _addStreamConfig(html: JQuery) {
 </span>
   <span>Stream DL</span>
 </button>`;
-  playlistFooter.prepend(streamButtonHtml);
+  const streamButtonWrappedHtml = `<div class="flexrow stream-dl-flex-full">${streamButtonHtml}</div>`;
+  playlistFooter.append(streamButtonWrappedHtml);
   const streamButton = html.find('.stream-dl-button');
   streamButton.on('click', (evt) => {
     new StreamDlForm({}).render(true);
@@ -59,11 +60,11 @@ class StreamDlForm extends FormApplication {
   };
 
   constructor(private data: any, options?: FormApplicationOptions) {
-    super({...data, saveTrack: true}, {...options, closeOnSubmit: false});
+    super({ ...data, saveTrack: true }, { ...options, closeOnSubmit: false });
   }
 
   protected _updateObject(event: Event | JQuery.Event, formData: any): Promise<any> {
-    if (!formData.playlist || !formData.title || !formData.url) {
+    if ((formData.saveTrack && !formData.playlist) || !formData.title || !formData.url) {
       return;
     }
     this.data = {
@@ -88,9 +89,10 @@ class StreamDlForm extends FormApplication {
   private async downloadStream(formData: StreamFormData): Promise<any> {
     try {
       const sanitizedTitle = sanitize(formData.title, '_');
-      const filename = !formData.filename || formData.filename.endsWith('/')
-        ? `${formData.filename}${sanitizedTitle}`
-        : formData.filename;
+      const filename =
+        !formData.filename || formData.filename.endsWith('/')
+          ? `${formData.filename}${sanitizedTitle}`
+          : formData.filename;
       const res: DownloadResponse = await $.ajax({
         method: 'POST',
         url: `${this.config.backendUrl}/download`,
@@ -114,7 +116,7 @@ class StreamDlForm extends FormApplication {
       }
       const playlist = game.playlists.get(formData.playlist);
       const path = `${this.config.dataPath}/${res.filename}`;
-      await playlist.createEmbeddedEntity('PlaylistSound', {name: formData.title, path});
+      await playlist.createEmbeddedEntity('PlaylistSound', { name: formData.title, path });
       await this.close();
     } catch (e) {
       // @ts-ignore
@@ -130,9 +132,13 @@ class StreamDlForm extends FormApplication {
 
     const saveTrackCheckbox = html.find('input[name="saveTrack"]');
 
-    saveTrackCheckbox.on('change', event => {
+    saveTrackCheckbox.on('change', (event) => {
       this.data.saveTrack = (event.target as HTMLInputElement).checked;
-      this.render();
+      if (this.data.saveTrack) {
+        html.find('select[name="playlist"]').removeAttr('disabled');
+      } else {
+        html.find('select[name="playlist"]').attr('disabled', 'disabled');
+      }
     });
   }
 }
