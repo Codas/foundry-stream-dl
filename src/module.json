@@ -2,23 +2,15 @@
   "name": "stream-dl",
   "title": "stream-dl",
   "description": "",
-  "systems": [],
   "version": "0.1.0",
-  "author": "",
-  "authors": [
-    {
-      "name": "",
-      "email": "",
-      "url": ""
-    }
-  ],
+  "author": "Arne Link",
   "scripts": [],
   "esmodules": ["stream-dl.js"],
   "styles": ["stream-dl.css"],
   "packs": [],
   "languages": [],
-  "minimumCoreVersion": "0.5.0",
-  "compatibleCoreVersion": "0.5.0",
+  "minimumCoreVersion": "0.6.0",
+  "compatibleCoreVersion": "0.6.0",
   "url": "",
   "manifest": "",
   "download": "",

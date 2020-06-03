@@ -1,0 +1,56 @@
+<form autocomplete="off" onsubmit="event.preventDefault()">
+  <h2>Stream Download</h2>
+
+  <div class="form-group">
+    <label>Stream URL</label>
+    <input type="text" name="url" title="Stream URL" value="{{ url }}">
+    <p class="notes">Provide the stream URL. For example <em>www.youtube.com/watch?v=ytId</em>
+    </p>
+  </div>
+
+  <div class="form-group">
+    <label>Title</label>
+    <input type="text" name="title" title="Title of the playlist entry" value="{{ title }}">
+    <p class="notes">Provide the title of the new playlist entry to create. For example <em>Epic battle music</em>/</p>
+  </div>
+
+  <div class="form-group">
+    <label>Filename</label>
+    <input type="text" name="filename" title="Filename to save the downloaded file as" value="{{ filename }}">
+    <p class="notes">The name of the file to be saved. Can include folder names.<br>
+      For example <em>"battlemusic/epic_battle"</em>
+      would create a file <em>"epic_battle.{mp3,webm,m4a,…}"</em> in the <em>"battlemusic"</em> subfolder.</p>
+  </div>
+
+
+  <div class="form-group">
+    <label>Save track to playlist</label>
+    <input type="checkbox" name="saveTrack" title="Save track to playlist" {{#if saveTrack}}checked{{/if}}>
+    <p class="notes">
+      Check this and select a playlist to automatically save the downloaded audio file as a track in the selected
+      playlist
+    </p>
+  </div>
+
+  <div class="form-group">
+    <label>Playlist</label>
+    <select name="playlist" title="Select playlist" {{^if saveTrack}}disabled{{/if}}>
+      {{#select playlist}}
+      {{#each playlists}}
+      <option value="{{this._id}}">{{this.name}}</option>
+      {{/each}}
+      {{/select}}
+    </select>
+    <p class="notes">Select a playlist for the downloaded track</p>
+  </div>
+
+  <button type="submit" name="submit">
+    {{#if isSaving}}
+    <i class="fas fa-spinner fa-pulse"></i>
+    {{/if}}
+    {{^if isSaving}}
+    <i class="far fa-save"></i>
+    {{/if}}
+    Download and Save
+  </button>
+</form>

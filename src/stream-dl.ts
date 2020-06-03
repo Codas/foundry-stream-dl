@@ -12,38 +12,43 @@
 
 // Import TypeScript modules
 import { registerSettings } from './module/settings.js';
-import { preloadTemplates } from './module/preloadTemplates.js';
+import { preloadTemplates } from './module/preload-templates.js';
+import { _onRenderPlaylistDirectory } from './module/form';
 
 /* ------------------------------------ */
 /* Initialize module					*/
 /* ------------------------------------ */
-Hooks.once('init', async function() {
-	console.log('stream-dl | Initializing stream-dl');
+Hooks.once('init', async function () {
+  console.log('stream-dl | Initializing stream-dl');
 
-	// Assign custom classes and constants here
-	
-	// Register custom module settings
-	registerSettings();
-	
-	// Preload Handlebars templates
-	await preloadTemplates();
+  // Assign custom classes and constants here
 
-	// Register custom sheets (if any)
+  // Register custom module settings
+  registerSettings();
+
+  // Preload Handlebars templates
+  await preloadTemplates();
+
+  // Register custom sheets (if any)
 });
 
 /* ------------------------------------ */
 /* Setup module							*/
 /* ------------------------------------ */
-Hooks.once('setup', function() {
-	// Do anything after initialization but before
-	// ready
+Hooks.once('setup', function () {
+  // Do anything after initialization but before
+  // ready
 });
 
 /* ------------------------------------ */
 /* When ready							*/
 /* ------------------------------------ */
-Hooks.once('ready', function() {
-	// Do anything once the module is ready
+Hooks.once('ready', function () {
+  // Do anything once the module is ready
 });
 
 // Add any additional hooks if necessary
+
+Hooks.on('renderPlaylistDirectory', (app, html, data) => {
+  _onRenderPlaylistDirectory(app, html, data);
+});
