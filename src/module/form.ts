@@ -67,9 +67,13 @@ class StreamDlForm extends FormApplication {
     if ((formData.saveTrack && !formData.playlist) || !formData.title || !formData.url) {
       return;
     }
+    const url = /^[a-zA-Z0-9_-]+$/.test(formData.url)
+      ? `https://www.youtube.com/watch?v=${formData.url}`
+      : formData.url;
     this.data = {
       ...(this.data ?? null),
       ...formData,
+      url: url,
       isSaving: true,
     };
     this.render();
